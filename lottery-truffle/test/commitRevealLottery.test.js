@@ -36,5 +36,15 @@ contract("CommitRevealLottery", accounts => {
 
             await truffleAssert.reverts(commitRevealLottery.enter(commit, { from : accounts[1], value : enterAmount}), "msg.value should be greater than or equal to 0.01 ETH");
         });
+        it("Enter 3 players and check values", async () => {
+            const enterAmt = web3.utils.toWei("0.01", "ether");
+
+            // player1 enter
+            const secret1 = 12345;
+            const commit1 = web3.utils.keccak256(web3.utils.encodePacked({value: accounts[1], type: "address"}, {value: secret1, type: "uint256"}));
+            console.log(`commit1: ${commit1}`);
+
+            await commitRevealLottery.enter(commit1, { from: accounts[1], value: enterAmt });
+        });
     });
-});
+}); 
