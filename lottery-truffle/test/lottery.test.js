@@ -83,19 +83,23 @@ contract("Lottery", (accounts) => {
             // check players' ETH balances before pickWinner
             const account1ETHBal_bef = await web3.eth.getBalance(accounts[1]);
             console.log(`account1's ETH balance: ${account1ETHBal_bef}`);
-            console.log(`account1's ETH balance to ether: ${account1ETHBal_bef / 10**18}`)
+            console.log(`account1's ETH balance to ether: ${account1ETHBal_bef / 10**18}`);
+
             const account2ETHBal_bef = await web3.eth.getBalance(accounts[2]);
             console.log(`account2's ETH balance: ${account2ETHBal_bef}`);
-            console.log(`account2's ETH balance to ether: ${account2ETHBal_bef / 10**18}`)
+            console.log(`account2's ETH balance to ether: ${account2ETHBal_bef / 10**18}`);
+
             const account3ETHBal_bef = await web3.eth.getBalance(accounts[3]);
             console.log(`account3's ETH balance: ${account3ETHBal_bef}`);
-            console.log(`account3's ETH balance to ether: ${account3ETHBal_bef / 10**18}`)
+            console.log(`account3's ETH balance to ether: ${account3ETHBal_bef / 10**18}`);
+
             const account4ETHBal_bef = await web3.eth.getBalance(accounts[4]);
             console.log(`account4's ETH balance: ${account4ETHBal_bef}`);
-            console.log(`account4's ETH balance to ether: ${account4ETHBal_bef / 10**18}`)
+            console.log(`account4's ETH balance to ether: ${account4ETHBal_bef / 10**18}`);
+
             const account5ETHBal_bef = await web3.eth.getBalance(accounts[5]);
             console.log(`account5's ETH balance: ${account5ETHBal_bef}`);
-            console.log(`account5's ETH balance to ether: ${account5ETHBal_bef / 10**18}`)
+            console.log(`account5's ETH balance to ether: ${account5ETHBal_bef / 10**18}`);
 
             console.log();
             console.log(">>> pickWinner");
@@ -113,12 +117,16 @@ contract("Lottery", (accounts) => {
 
             const account1ETHBal_aft = await web3.eth.getBalance(accounts[1]);
             console.log(`account1's ETH balance: ${account1ETHBal_aft}`);
+            
             const account2ETHBal_aft = await web3.eth.getBalance(accounts[2]);
             console.log(`account2's ETH balance: ${account2ETHBal_aft}`);
+            
             const account3ETHBal_aft = await web3.eth.getBalance(accounts[3]);
             console.log(`account3's ETH balance: ${account3ETHBal_aft}`);
+            
             const account4ETHBal_aft = await web3.eth.getBalance(accounts[4]);
             console.log(`account4's ETH balance: ${account4ETHBal_aft}`);
+            
             const account5ETHBal_aft = await web3.eth.getBalance(accounts[5]);
             console.log(`account5's ETH balance: ${account5ETHBal_aft}`);
 
