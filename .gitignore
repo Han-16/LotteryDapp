@@ -1,0 +1,16 @@
+lottery-truffle/node_modules/
+lottery-truffle/package-lock.json
+lottery-truffle/package.json
+
+lottery-hardhat/node_modules/
+lottery-hardhat/.env
+lottery-hardhat/coverage
+lottery-hardhat/coverage.json
+lottery-hardhat/typechain
+lottery-hardhat/typechain-types
+lottery-hardhat/package-lock.json
+lottery-hardhat/package.json
+
+# Hardhat files
+lottery-hardhat/cache
+lottery-hardhat/artifacts
