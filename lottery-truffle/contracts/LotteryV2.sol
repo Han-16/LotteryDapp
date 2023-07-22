@@ -4,8 +4,7 @@ pragma solidity ^0.8.15;
 import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 
-contract LotteryV2 is VRFConsumerBaseV2{
-
+contract LotteryV2 is VRFConsumerBaseV2 {
     address public owner;
     address payable[] public players;
     uint256 public lotteryId;
@@ -31,7 +30,7 @@ contract LotteryV2 is VRFConsumerBaseV2{
     // this limit based on the network that you select, the size of the request,
     // and the processing of the callback request in the fulfillRandomWords()
     // function.
-    uint32 callbackGasLimit = 1_000_000;
+    uint32 callbackGasLimit = 1000000;
 
     // The default is 3, but you can set this higher.
     uint16 requestConfirmations = 3;
@@ -43,13 +42,10 @@ contract LotteryV2 is VRFConsumerBaseV2{
     uint256[] public s_randomWords;
     uint256 public s_requestId;
 
-    constructor() {
+    constructor(uint64 subscriptionId) VRFConsumerBaseV2(vrfCoordinator) {
         owner = msg.sender;
-    }
-
-    function enter() public payable {
-        require(msg.value >= .01 ether, "msg.value should be greater than or equal to 0.01 ETH");
-        players.push(payable(msg.sender));
+        COORDINATOR = VRFCoordinatorV2Interface(vrfCoordinator);
+        s_subscriptionId = subscriptionId;
     }
 
     function getBalance() public view returns (uint256) {
@@ -59,33 +55,51 @@ contract LotteryV2 is VRFConsumerBaseV2{
     function getPlayers() public view returns (address payable[] memory) {
         return players;
     }
-    
-    function getRandomNumber() public view returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(owner, block.timestamp)));
+
+    function enter() public payable {
+        require(msg.value >= .01 ether, "msg.value should be greater than or equal to 0.01 ether");
+        players.push(payable(msg.sender));
     }
 
-
-    function getRandomNumberV2() public view returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(block.difficulty, block.timestamp, players)));
+    // Assumes the subscription is funded sufficiently.
+    function _requestRandomWords() internal {
+        // Will revert if subscription is not set and funded.
+        s_requestId = COORDINATOR.requestRandomWords(
+            keyHash,
+            s_subscriptionId,
+            requestConfirmations,
+            callbackGasLimit,
+            numWords
+        );
     }
 
-    function getRandomNumberV3() public view returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(blockhash(block.number - 1), block.timestamp)));
+    function fulfillRandomWords(
+        uint256, /* requestId */
+        uint256[] memory randomWords
+    ) internal override {
+        s_randomWords = randomWords;
+        _prizeWinner();
     }
 
     function pickWinner() public onlyOwner {
-        uint256 index = getRandomNumber() % players.length;
+        _requestRandomWords();
+    }
+
+    function _prizeWinner() internal {
+        uint256 index = s_randomWords[0] % players.length;
+
         lotteryHistory[lotteryId] = players[index];
         lotteryId++;
 
-        (bool success, ) = players[index].call{ value : address(this).balance }("");
-        require(success, "Failed to send ETH");
-
+        address payable winner = players[index];
         players = new address payable[](0);
+
+        (bool success, ) = winner.call{value: address(this).balance}("");
+        require(success, "Failed to send Ether");
     }
 
     modifier onlyOwner {
-        require(msg.sender == owner, "U r not owner");
+        require(msg.sender == owner, "you're not owner");
         _;
     }
 }
