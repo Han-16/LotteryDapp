@@ -14,3 +14,7 @@ lottery-hardhat/package.json
 # Hardhat files
 lottery-hardhat/cache
 lottery-hardhat/artifacts
+
+lottery-v2-api-server/package.json
+
+.DS_Store
