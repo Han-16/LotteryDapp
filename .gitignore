@@ -16,5 +16,11 @@ lottery-hardhat/cache
 lottery-hardhat/artifacts
 
 lottery-v2-api-server/package.json
+lottery-v2-api-server/package-lock.json
+lottery-v2-api-server/node_modules/
+
+lottery-v2-api-server/config/development.env
+lottery-v2-api-server/config/sepolia.env
+lottery-v2-api-server/config/db-config.json
 
 .DS_Store
