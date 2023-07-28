@@ -1,7 +1,7 @@
 const _ = require("lodash");
 
 class ResponseHandler {
-
+    
     static sendSuccess(res, message, status) {
         const funcName = "sendSuccess";
         return (data, globalData) => {
@@ -28,7 +28,7 @@ class ResponseHandler {
     static sendServerError(req, res, error) {
         const funcName = "sendServerError";
         console.error(`[${funcName}], `, error);
-        return res.status(status).json({
+        return res.status(error.status || 500).json({
             type: "server_issue",
             message: error.message || "Server issue",
             error,

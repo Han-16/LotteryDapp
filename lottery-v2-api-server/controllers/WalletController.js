@@ -1,5 +1,7 @@
 const ResponseHandler = require("../services/ResponseHandler");
 const CipherUtil = require("../services/CipherUtil");
+const WalletDBInteractor = require("../services/db/WalletDBInteractor");
+const errorCodes = require("../constants/errorCodes").errorCodes;
 
 class WalletController {
       
@@ -17,6 +19,17 @@ class WalletController {
                 private_key: CipherUtil.encrypt(privateKey),
             };
             console.log(`[${funcName}] wallet info: ${JSON.stringify(walletInfo)}`);
+
+            const inserted = await WalletDBInteractor.insertWallet(walletInfo);
+            if (inserted.status == errorCodes.success) {
+                return ResponseHandler.sendSuccess(res, "success", 201)({
+                    status: "Confirmed",
+                });
+            } else if (inserted.status == errorCodes.client_issue) {
+                return ResponseHandler.sendClientError(400, req, res, "this wallet already exists in db");
+            } else {
+                throw new Error(inserted.err);
+            }
         } catch (error) {
             console.error(`[${funcName}] err : `, error);
             return ResponseHandler.sendServerError(req, res, error);
