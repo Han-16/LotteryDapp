@@ -37,4 +37,4 @@ class WalletController {
     }
 }
 
-module.exports = WalletcController;
+module.exports = WalletController;
