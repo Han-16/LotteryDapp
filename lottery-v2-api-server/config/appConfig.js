@@ -4,4 +4,8 @@ const database = require("./db-config.json")[envType];
 
 module.exports = {
     database : database,
+    blockchain: {
+        development: "http://localhost:8545",
+        sepolia: "https://ethereum-sepolia-rpc-korea.allthatnode.com",
+    }
 };
