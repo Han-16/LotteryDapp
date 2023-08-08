@@ -4,6 +4,10 @@ const envType = process.env.NODE_ENV || "development";
 const path = require("path");
 const fs = require("fs");
 require("dotenv").config({ path: path.join(__dirname, `../../config/${envType}.env`) });
+const { FeeMarketEIP1559Transaction } = require("@ethereumjs/tx");
+const {  } = require("@ethereumjs/tx");
+
+
 class ContractUtil {
     
     constructor() {
@@ -40,6 +44,36 @@ class ContractUtil {
             return instance.abi;
         } catch (err) {
             console.err(`[${funcName}] err : ${err}`);
+        }
+    }
+
+    async signTransaction(signer, pk, to, gas, value, data) {
+        const funcName = "signTransaction";
+        try {
+            const nonce = await this.web3.eth.getTransactionCount(signer);
+            const priorityFee = this.web3.utils.toWei("1", "Gwei");
+            const pendingBlock = await this.web3.eth.getBlock("pending");
+            const baseFeePerGas = pendingBlock.baseFeePerGas;
+            const toHex = this.web3.utils.toHex();
+            const chainId = await this.web3.eth.net.getId();
+
+            const rawTx = {
+                nonce: toHex(nonce),
+                to: to,
+                maxPriorityFeePerGas: toHex(priorityFee),
+                maxFeePerGas: toHex(Math.floor(baseFeePerGas * 1.01) + Number(priorityFee)),
+                gas: toHex(gas),
+                gasLimit: toHex(Math.floor(gas * 1.01)),
+                value: toHex(value),
+                data: data,
+                chainId: toHex(chainId),
+            };
+
+            console.log(`[${funcName}] rawTx : ${JSON.stringify(rawTx)}`);
+
+            FeeMarketEIP1559Transaction.fromTxData(rawTx, )
+        } catch (err) {
+            console.error(`[${funcName}] err : `, err);
         }
     }
 

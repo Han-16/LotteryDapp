@@ -11,7 +11,6 @@ class LotteryV2Controller {
             const enterAmount = req.body.enter_amount;
             console.log(`[${funcName}] req.body : ${JSON.stringify(req.body)}`);
 
-
             const wallet = await WalletDBInteractor.getWallet(accountName);
             console.log(`[${funcName}] wallet : ${JSON.stringify(wallet)}`);
             
@@ -23,7 +22,7 @@ class LotteryV2Controller {
                     throw new Error(wallet.err);
             }   
 
-            
+            const enterResult = LotteryV2Controller.enter(wallet.result.account)
         } catch (err) {
             console.error(`[${funcName}] err : `, err);
             return ResponseHandler.sendServerError(req, res, err);
