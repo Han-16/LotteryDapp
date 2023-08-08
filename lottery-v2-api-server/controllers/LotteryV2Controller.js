@@ -1,6 +1,10 @@
 const ResponseHandler = require("../services/ResponseHandler");
 const WalletDBInteractor = require("../services/db/WalletDBInteractor");
 const errorCodes = require("../constants/errorCodes").errorCodes;
+const LotteryV2Interactor = require("../services/contract/LotteryV2Interactor");
+const lotteryV2Interactor = new LotteryV2Interactor();
+const CipherUtil = require("../services/CipherUtil");
+
 
 class LotteryV2Controller {
 
@@ -22,7 +26,14 @@ class LotteryV2Controller {
                     throw new Error(wallet.err);
             }   
 
-            const enterResult = LotteryV2Controller.enter(wallet.result.account)
+            const enterResult = await lotteryV2Interactor.enter(wallet.result.account, CipherUtil.decrypt(wallet.result.private_key), enterAmount);
+            if (!enterResult.status) {
+                throw new Error(enterResult.errMsg);
+            }
+            return ResponseHandler.sendSuccess(res, "succes", 200)({
+                status: "Confirmed",
+                tx_hash: enterResult.result,
+            });
         } catch (err) {
             console.error(`[${funcName}] err : `, err);
             return ResponseHandler.sendServerError(req, res, err);
