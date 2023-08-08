@@ -5,8 +5,8 @@ const path = require("path");
 const fs = require("fs");
 require("dotenv").config({ path: path.join(__dirname, `../../config/${envType}.env`) });
 const { FeeMarketEIP1559Transaction } = require("@ethereumjs/tx");
-const {  } = require("@ethereumjs/tx");
-
+const { Common } = require("@ethereumjs/common").default;
+const { Chain, Hardfork} = require("@ethereumjs/common");
 
 class ContractUtil {
     
@@ -70,8 +70,16 @@ class ContractUtil {
             };
 
             console.log(`[${funcName}] rawTx : ${JSON.stringify(rawTx)}`);
+            
+            const common = new Common({ chain: Chain.Sepolia, hardfork: Hardfork.London})
+            const tx = FeeMarketEIP1559Transaction.fromTxData(rawTx, common);
+            const signedTx = tx.sign(Buffer.from(pk, "hex"));
+            const serializedTx = "0x" + signedTx.serialize().toString("hex");
 
-            FeeMarketEIP1559Transaction.fromTxData(rawTx, )
+            console.log(`[${funcName}] signedTx: ${JSON.stringify(singedTx)},
+            serializedTx : ${serializedTx}`);
+
+            return serializedTx;
         } catch (err) {
             console.error(`[${funcName}] err : `, err);
         }
