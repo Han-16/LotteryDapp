@@ -26,7 +26,9 @@ class LotteryV2Controller {
                     throw new Error(wallet.err);
             }   
 
-            const enterResult = await lotteryV2Interactor.enter(wallet.result.account, CipherUtil.decrypt(wallet.result.private_key), enterAmount);
+            const enterResult = await lotteryV2Interactor.enter(
+                wallet.result.account, CipherUtil.decrypt(wallet.result.private_key), enterAmount
+                );
             if (!enterResult.status) {
                 throw new Error(enterResult.errMsg);
             }

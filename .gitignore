@@ -22,5 +22,7 @@ lottery-v2-api-server/node_modules/
 lottery-v2-api-server/config/development.env
 lottery-v2-api-server/config/sepolia.env
 lottery-v2-api-server/config/db-config.json
+lottery-v2-api-server/data/
+
 
 .DS_Store
