@@ -16,6 +16,8 @@ class ContractUtil {
 
     #initializeWeb3() {
         this.web3 = new Web3(new Web3.providers.HttpProvider(config.blockchain[envType]));
+        // this.web3 = new Web3(new Web3.providers.Web3HttpProvider(config.blockchain[envType]));
+
     }
 
     async getContract(contractName) {

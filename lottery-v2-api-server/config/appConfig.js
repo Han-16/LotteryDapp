@@ -6,6 +6,6 @@ module.exports = {
     database : database,
     blockchain: {
         development: "http://localhost:8545",
-        sepolia: "https://ethereum-sepolia-rpc-korea.allthatnode.com",
+        sepolia: "https://ethereum-sepolia-rpc.allthatnode.com/qNefFmvTBFfAwKBVzwrBb0wkFPY3yXb4",
     }
 };

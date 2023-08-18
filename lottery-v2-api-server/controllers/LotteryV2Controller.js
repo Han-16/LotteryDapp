@@ -41,6 +41,72 @@ class LotteryV2Controller {
             return ResponseHandler.sendServerError(req, res, err);
         }
     }
+
+
+
+    static async getBalance(req, res) {
+        const funcName = "getBalance";
+        try {
+            const balanceResult = await lotteryV2Interactor.getBalance();
+            if (!balanceResult.status) {
+                throw new Error(balanceResult.errMsg);
+            }
+
+            return ResponseHandler.sendSuccess(res, "success", 200)({ 
+                status: "Confirmed",
+                balance: balanceResult.result,
+             });
+        } catch (err) {
+            console.error(`[${funcName}] err :`, err);
+            return ResponseHandler.sendServerError(req, res, err);
+        }
+    }
+
+    static async getPlayers(req, res) {
+        const funcName = "getPlayers";
+        try {
+            const playersResult = await lotteryV2Interactor.getPlayers();
+            if (!playersResult.status) {
+                throw new Error(playersResult.errMsg);
+            }
+
+            return ResponseHandler.sendSuccess(res, "success", 200)({
+                status: "Confirmed",
+                players: playersResult.result,
+            })
+        } catch (err) {
+            console.error(`[${funcName}] err:`, err);
+            return ResponseHandler.sendServerError(req, res, err);
+        }
+    }
+
+    static async lotteryId(req, res) {
+        const funcName = "lotteryId";
+        try {
+            const lotteryIdResult = await lotteryV2Interactor.lotteryId();
+            if (!lotteryIdResult.status) {
+                throw new Error(lotteryIdResult.errMsg);
+            }
+
+            return ResponseHandler.sendSuccess(res, "success", 200) ({
+                status: "Confirmed",
+                lottery_id: lotteryIdResult.result,
+            });
+        } catch (err) {
+            console.error(`[${funcName}] err:`, err);
+            return ResponseHandler.sendServerError(req, res, err);
+        }
+    }
+
+    static async lotteryHistory(req, res) {
+        const funcName = "lotteryHistory";
+        try {
+            const lotteryId = req.query.lottery_id;
+        } catch (err) {
+            console.error(`[${funcName}] err:`, err);
+            return ResponseHandler.sendServerError(req, res, err);
+        }
+    }
 }
 
 module.exports = LotteryV2Controller;
