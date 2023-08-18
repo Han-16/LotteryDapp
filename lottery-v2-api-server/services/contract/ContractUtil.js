@@ -1,4 +1,4 @@
-const Web3 = require("web3");
+const { Web3 } = require("web3");
 const path = require("path");
 const envType = process.env.NODE_ENV || "development";
 require("dotenv").config({ path: path.join(__dirname, `../../config/${envType}.env`)});

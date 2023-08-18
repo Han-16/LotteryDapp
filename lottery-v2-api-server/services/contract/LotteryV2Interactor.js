@@ -53,7 +53,7 @@ class LotteryV2Interactor {
         const funcName = "getBalance";
         try {
             const balance = this.LotteryV2.methods.getBalance().call();
-            console.log(`[${funcName}] balance of LotteryV2: ${balance }`);
+            console.log(`[${funcName}] balance of LotteryV2: ${JSON.stringify(balance)}`);
 
             return {
                 status: true,
@@ -111,6 +111,27 @@ class LotteryV2Interactor {
             }
         }
     }
+
+    async s_randomWords(index) {
+        const funcName = "s_randomWords";
+        try {
+            const randomWords = await this.LotteryV2.methods.s_randomWords(index).call();
+            console.log(`[${funcName}] randomWords: ${randomWords}`);
+
+            return {
+                status: true,
+                result: randomWords,
+                errMsg: null,
+            }
+        } catch (err) {
+            console.error(`[${funcName}] err:`, err);
+            return {
+                status: false,
+                result: null,
+                errMsg: err.message,
+            };
+        }
+    }    
 }
 
 module.exports = LotteryV2Interactor;  
