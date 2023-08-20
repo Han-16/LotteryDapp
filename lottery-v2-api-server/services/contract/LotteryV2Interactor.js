@@ -131,7 +131,60 @@ class LotteryV2Interactor {
                 errMsg: err.message,
             };
         }
-    }    
+    }
+    
+    async getPlayerBalance(account) {
+        const funcName = "getPlayerBalance";
+        try {
+            const balance = await this.web3.eth.getBalance(account);
+            console.log(`[${funcName}] account ${account}'s balance: ${balance}`);
+
+            return {
+                status: true,
+                result: balance,
+                errMsg: null,
+            }
+        } catch (err) {
+            console.error(`[${funcName}] err : `, err);
+            return {
+                status: false,
+                result: null,
+                errMsg: err.message,
+            }
+        }
+    }
+
+    async pickWinner(signer, pk) {
+        const funcName = "pickWinner";
+        try {
+            const gas = await this.LotteryV2.methods.pickWinner().estimateGas({ from: signer })
+            .catch(revertReason => { throw new Error(`estimating gas ERRRRRRRR: ${revertReason}`) });
+            console.log(`[${funcName}] estimated gas: ${gas}`);
+
+            const to = this.LotteryV2._address;
+            const data = this.LotteryV2.methods.pickWinner().encodeABI();
+            const serializedTx = await contractUtil.signTransaction(signer, pk, to, gas, 0, data);
+            let txHash;
+
+            await this.web3.eth.sendSignedTransaction(serializedTx).contractAddress("transactionHash", async (tx) => {
+                console.log(`[${funcName}] transaction created! tx hash: ${tx}`);
+                txHash = tx;
+            });
+
+            return {
+                status: true,
+                result: txHash,
+                errMsg: null,
+            }
+        } catch (err) {
+            console.error(`[${funcName}] err : `, err);
+            return {
+                status: false,
+                result: null,
+                errMsg: err.message,
+            }
+        }
+    }
 }
 
 module.exports = LotteryV2Interactor;  
